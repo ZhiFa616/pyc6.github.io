@@ -38,19 +38,19 @@
   })();
 </script>
   <meta name="generator" content="Gridea Pro 1.2.2">
-  <title>标签 | 隙间互联</title>
+  <title>闪念 | 隙间互联</title>
   
 <meta name="description" content="Welcome to XJHL">
-<link rel="canonical" href="https://pyc6.github.io/tags/">
+<link rel="canonical" href="https://pyc6.github.io/memos/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"隙间互联","url":"https://pyc6.github.io","description":"Welcome to XJHL","potentialAction":{"@type":"SearchAction","query-input":"required name=search_term_string","target":"https://pyc6.github.io/search?q={search_term_string}"}}</script>
 <meta property="og:title" content="隙间互联">
 <meta property="og:description" content="Welcome to XJHL">
-<meta property="og:url" content="https://pyc6.github.io/tags/">
+<meta property="og:url" content="https://pyc6.github.io/memos/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="隙间互联">
 <meta property="og:image" content="/images/avatar.png">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:url" content="https://pyc6.github.io/tags/">
+<meta name="twitter:url" content="https://pyc6.github.io/memos/">
 <meta name="twitter:title" content="隙间互联">
 <meta name="twitter:description" content="Welcome to XJHL">
 <meta name="twitter:image" content="/images/avatar.png">
@@ -178,31 +178,158 @@
     
 <div class="container">
   <div class="page-header">
-    <h1 class="page-title">标签</h1>
+    <h1 class="page-title">闪念</h1>
+    <p class="page-subtitle">灵感碎片与随想</p>
+  </div>
+
+  
+
+  
+  <div class="heatmap-wrap">
+    <div id="heatmap-root"></div>
+    <div class="heatmap-footer">
+      <span id="heatmap-total"></span>
+      <div class="heatmap-legend">
+        <span>少</span>
+        <span class="heatmap-legend-cell" data-level="0"></span>
+        <span class="heatmap-legend-cell" data-level="1"></span>
+        <span class="heatmap-legend-cell" data-level="2"></span>
+        <span class="heatmap-legend-cell" data-level="3"></span>
+        <span class="heatmap-legend-cell" data-level="4"></span>
+        <span>多</span>
+      </div>
+    </div>
+  </div>
+  
+
+  <div class="memo-timeline">
     
-    <p class="page-subtitle meta-text">共 3 个标签</p>
+    <div class="memo-item" data-created="2026-07-02">
+      <div class="memo-item__marker"></div>
+      <div class="memo-item__card">
+        <div class="memo-item__content article-content">
+          <p>清理电脑时意外将我的心爱的VS Code删掉了&hellip;.心疼&hellip;</p>
+
+        </div>
+        <time class="memo-item__date meta-text">2026-07-02</time>
+      </div>
+    </div>
+    
+    <div class="memo-item" data-created="2026-06-28">
+      <div class="memo-item__marker"></div>
+      <div class="memo-item__card">
+        <div class="memo-item__content article-content">
+          <p>原来的内容失效了，我重构了一下，然后发现，出现了很多bug.我修啊修最后完成了（应该吧）</p>
+
+        </div>
+        <time class="memo-item__date meta-text">2026-06-28</time>
+      </div>
+    </div>
     
   </div>
 
   
-  <div class="tag-cloud">
-    
-    <a href="/tag/yin-le/" class="tag-pill tag-pill--lg">
-      <span class="tag-pill__name">音乐</span>
-      <span class="tag-pill__count">2</span>
-    </a>
-    
-    <a href="/tag/zheng-he-bao/" class="tag-pill tag-pill--lg">
-      <span class="tag-pill__name">整合包</span>
-      <span class="tag-pill__count">5</span>
-    </a>
-    
-    <a href="/tag/mian-fei-ruan-jian/" class="tag-pill tag-pill--lg">
-      <span class="tag-pill__name">免费软件</span>
-      <span class="tag-pill__count">2</span>
-    </a>
-    
-  </div>
+  <script>
+    (function () {
+      var items = document.querySelectorAll('.memo-item');
+      if (!items.length) return;
+
+      var heatmapData = {};
+      items.forEach(function (item) {
+        var d = item.getAttribute('data-created');
+        if (d) {
+          var dateStr = d.substring(0, 10);
+          heatmapData[dateStr] = (heatmapData[dateStr] || 0) + 1;
+        }
+      });
+
+      var MONTHS = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+      var DAYS = ['日', '一', '二', '三', '四', '五', '六'];
+
+      var today = new Date();
+      today.setHours(0, 0, 0, 0);
+      var endDay = today.getDay();
+      var totalDays = 52 * 7 + endDay + 1;
+      var startDate = new Date(today);
+      startDate.setDate(startDate.getDate() - totalDays + 1);
+      startDate.setDate(startDate.getDate() - startDate.getDay());
+
+      var totalWeeks = Math.ceil(totalDays / 7);
+
+      var weeks = [];
+      for (var w = 0; w < totalWeeks; w++) {
+        var week = [];
+        for (var d = 0; d < 7; d++) {
+          var cellDate = new Date(startDate);
+          cellDate.setDate(cellDate.getDate() + w * 7 + d);
+          var key = cellDate.getFullYear() + '-' + String(cellDate.getMonth() + 1).padStart(2, '0') + '-' + String(cellDate.getDate()).padStart(2, '0');
+          var count = heatmapData[key] || 0;
+          var level = count === 0 ? 0 : count === 1 ? 1 : count <= 3 ? 2 : count <= 5 ? 3 : 4;
+          var future = cellDate > today;
+          week.push({ date: cellDate, key: key, count: count, level: level, future: future, month: cellDate.getMonth() });
+        }
+        weeks.push(week);
+      }
+
+      var monthLabels = [];
+      var lastMonth = -1;
+      for (var w = 0; w < weeks.length; w++) {
+        var firstDay = weeks[w][0];
+        if (!firstDay.future && firstDay.month !== lastMonth) {
+          monthLabels.push({ weekIndex: w, label: MONTHS[firstDay.month] });
+          lastMonth = firstDay.month;
+        }
+      }
+      // 过滤 colspan 小于 2 的月份标签（避免两端出现 1 列宽的残月）
+      monthLabels = monthLabels.filter(function (m, i) {
+        var next = i + 1 < monthLabels.length ? monthLabels[i + 1].weekIndex : weeks.length;
+        return next - m.weekIndex >= 2;
+      });
+
+      var html = '<table>';
+      html += '<tr><td class="heatmap-day-label"></td>';
+      var monthColIdx = 0;
+      for (var w = 0; w < totalWeeks; w++) {
+        if (monthColIdx < monthLabels.length && monthLabels[monthColIdx].weekIndex === w) {
+          var nextIdx = monthColIdx + 1 < monthLabels.length ? monthLabels[monthColIdx + 1].weekIndex : totalWeeks;
+          var span = nextIdx - w;
+          html += '<td colspan="' + span + '" class="heatmap-month-label">' + monthLabels[monthColIdx].label + '</td>';
+          w += span - 1;
+          monthColIdx++;
+        } else {
+          html += '<td class="heatmap-month-label"></td>';
+        }
+      }
+      html += '</tr>';
+
+      for (var d = 0; d < 7; d++) {
+        html += '<tr>';
+        html += '<td class="heatmap-day-label">' + DAYS[d] + '</td>';
+        for (var w = 0; w < weeks.length; w++) {
+          var c = weeks[w][d];
+          if (c.future) {
+            html += '<td class="cell" data-level="0"></td>';
+          } else {
+            html += '<td class="cell" data-level="' + c.level + '" title="' + c.key + '：' + c.count + ' 条闪念"></td>';
+          }
+        }
+        html += '</tr>';
+      }
+      html += '</table>';
+
+      var root = document.getElementById('heatmap-root');
+      if (root) root.innerHTML = html;
+      var totalEl = document.getElementById('heatmap-total');
+      if (totalEl) totalEl.textContent = '过去一年共 ' + items.length + ' 条闪念';
+
+      setTimeout(function () {
+        var wrap = document.querySelector('.heatmap-wrap');
+        if (wrap) wrap.scrollLeft = wrap.scrollWidth;
+      }, 100);
+    })();
+  </script>
+  
+
   
 </div>
 
